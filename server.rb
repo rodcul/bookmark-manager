@@ -19,8 +19,9 @@ DataMapper.auto_upgrade!
 
 class BookmarkManager < Sinatra::Base
   get '/' do
-    'Hello BookmarkManager!'
-  end
+  @links = Link.all
+  erb :index
+end
 
   # start the server if ruby file executed directly
   run! if app_file == $PROGRAM_NAME
