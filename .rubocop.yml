@@ -1,6 +1,7 @@
 AllCops:
   Exclude:
     - 'features/step_definitions/web_steps.rb'
+    - 'spec/spec_helper.rb'
 
 EmptyLinesAroundBlockBody:
   Enabled: false
