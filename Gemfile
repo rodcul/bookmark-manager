@@ -7,6 +7,7 @@ gem 'dm-postgres-adapter'
 gem 'bcrypt'
 gem 'rack-flash3'
 gem 'rake'
+gem 'rest-client'
 
 group :test do
   gem 'rspec'
