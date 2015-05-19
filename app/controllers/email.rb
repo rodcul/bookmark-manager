@@ -14,5 +14,5 @@ get '/email/:token' do
       :to => "rodcul@gmail.com",
       :subject => "This is subject",
       :text => user.email,
-      :html => '<a href = "/users/reset_password/<%= token %>"><%= token %></a>'
+      :html => "https://secret-retreat-5607.herokuapp.com/email/" + token
 end
