@@ -5,9 +5,11 @@ require './lib/tag'
 require './lib/user'
 require_relative 'helpers/application'
 require_relative 'data_mapper_setup'
+require 'rack-flash'
 
 enable :sessions
 set :session_secret, 'nuOkCokOb'
+use Rack::Flash
 
 get '/' do
   @links = Link.all
@@ -37,13 +39,20 @@ get '/users/new' do
   # we need the quotes because otherwise
   # ruby would divide the symbol :users by the
   # variable new (which makes no sense)
+  @user = User.new
   erb :'users/new'
 end
 
 post '/users' do
-  user = User.create(email: params[:email],
-                     password: params[:password],
-                     password_confirmation: params[:password_confirmation])
-  session[:user_id] = user.id
-  redirect to('/')
+  @user = User.create(email: params[:email],
+                      password: params[:password],
+                      password_confirmation: params[:password_confirmation])
+
+  if @user.save
+    session[:user_id] = @user.id
+    redirect to('/')
+  else
+    flash[:notice] = 'Sorry, your passwords do not match'
+    erb :'users/new'
+  end
 end
