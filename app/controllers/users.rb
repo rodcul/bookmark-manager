@@ -29,14 +29,16 @@ get '/users/reset_password/send_email' do
 end
 
 post '/users/reset_password/send_email' do
-  flash[:notice] = 'Password recovery e-mail sent!'
+
   email = params[:email]
   user = User.first(email: email)
   # avoid having to memorise ascii codes
-  user.password_token = random_string = SecureRandom.hex
+  token = SecureRandom.hex
+  user.password_token = token
   user.password_token_timestamp = Time.now
   user.save
-  erb :'users/reset_password/send_email'
+  flash[:notice] = 'Password recovery e-mail sent!'
+  redirect to '/email/' + token
 end
 
 get '/users/reset_password/:token' do
