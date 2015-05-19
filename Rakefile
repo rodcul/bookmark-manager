@@ -12,7 +12,6 @@ end
 
 task default: [:cop, :spec, :features]
 
-
 task :auto_upgrade do
   # auto_upgrade makes non-destructive changes.
   # If your tables don't exist, they will be created

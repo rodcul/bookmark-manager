@@ -43,6 +43,23 @@ get '/users/new' do
   erb :'users/new'
 end
 
+get '/sessions/new' do
+  erb :'sessions/new'
+end
+
+post '/sessions' do
+  email = params[:email]
+  password = params[:password]
+  user = User.authenticate(email, password)
+  if user
+    session[:user_id] = user.id
+    redirect to '/'
+  else
+    flash[:errors] = ['The email or password is incorrect']
+    erb :'sessions/new'
+  end
+end
+
 post '/users' do
   @user = User.create(email: params[:email],
                       password: params[:password],
