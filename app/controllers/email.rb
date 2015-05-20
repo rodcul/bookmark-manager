@@ -8,11 +8,10 @@ get '/email/:token' do
   token = params[:token]
   user = User.first(password_token: token)
 
-
-  RestClient.post API_URL+"/messages",
-      :from => "rodcul@gmail.com",
-      :to => "rodcul@gmail.com",
-      :subject => "This is subject",
-      :text => user.email,
-      :html => "https://secret-retreat-5607.herokuapp.com/users/reset_password/" + token
+  RestClient.post API_URL + "/messages",
+                  from: "rodcul@gmail.com",
+                  to: "rodcul@gmail.com",
+                  subject: "This is subject",
+                  text: user.email,
+                  html: "https://secret-retreat-5607.herokuapp.com/users/reset_password/" + token
 end
