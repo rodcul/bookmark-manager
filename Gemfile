@@ -16,4 +16,5 @@ group :test do
   gem 'cucumber'
   gem 'launchy'
   gem 'byebug'
+  gem 'codeclimate-test-reporter'
 end
