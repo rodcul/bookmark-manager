@@ -1,9 +1,11 @@
-feature 'User resets password' do
+feature 'User forgotten password' do
 
   before(:each) do
     User.create(email: 'test@test.com',
                 password: 'test',
-                password_confirmation: 'test')
+                password_confirmation: 'test',
+                password_token: 'test-token',
+                password_token_timestamp: DateTime.now)
 
   end
 
@@ -16,6 +18,14 @@ feature 'User resets password' do
     expect(page).to have_content('Password e-mail sent, check your inbox!')
   end
 
+  scenario 'reset by clicking on link' do
+    visit '/users/reset_password/test-token'
+    fill_in :password, with: 'newpassword'
+    fill_in :password_confirmation, with: 'newpassword'
+    click_button 'Reset password'
+    expect(page).to have_content('New password saved, please login')
+  end
+
   scenario 'FAIL: Sending password reset email (incorrect email)' do
     visit '/'
     click_link 'Login'
@@ -25,13 +35,19 @@ feature 'User resets password' do
     expect(page).to have_content('Unknown e-mail address, try again')
   end
 
-  xscenario 'Change password by clicking on link' do
-    user = User.first(email: 'test@test.com')
-    token = user.password_token
-    visit '/users/reset_password' + token
+  scenario 'FAIL: trying to use same token twice' do
+    visit '/users/reset_password/test-token'
     fill_in :password, with: 'newpassword'
     fill_in :password_confirmation, with: 'newpassword'
     click_button 'Reset password'
-    expect(page).to have_content('Password updated, please login with your new password!')
+    visit '/users/reset_password/test-token'
+    expect(page).to have_content('Invalid token')
   end
+
+  scenario 'FAIL: Invalid token' do
+    visit '/users/reset_password/invalid-token'
+    expect(page).to have_content('Invalid token')
+  end
+
+
 end

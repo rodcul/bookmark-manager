@@ -10,7 +10,6 @@ get '/email/:token' do
   user = User.first(password_token: token)
   email = user.email
 
-
   RestClient::Request.execute(
     url: API_URL + '/messages',
     method: :post,

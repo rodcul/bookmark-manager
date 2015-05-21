@@ -15,4 +15,5 @@ group :test do
   gem 'capybara'
   gem 'cucumber'
   gem 'launchy'
+  gem 'byebug'
 end

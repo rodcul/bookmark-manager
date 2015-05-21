@@ -48,18 +48,22 @@ end
 get '/users/reset_password/:token' do
   @token = params[:token]
   user = User.first(password_token: @token)
-  erb :'users/reset_password/new'
+  if user.nil?
+    flash[:notice] = 'Invalid token (already used or expired, please resend confirmation e-mail)'
+    redirect to '/'
+  else
+    erb :'users/reset_password/new'
+  end
 end
 
 post '/users/reset_password' do
   token = params[:token]
   user = User.first(password_token: token)
-
   if user.password_token_timestamp >= DateTime.now - (1 * 60 * 60)
     user.password = params[:password]
     user.password_confirmation = params[:password_confirmation]
     user.save
-    flash[:notice] = 'Password updated, please login with your new password'
+    flash[:notice] = 'New password saved, please login'
     redirect to '/sessions/new'
   else
     flash[:notice] = 'Your password did not get saved, try again'
