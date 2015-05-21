@@ -29,32 +29,43 @@ get '/users/reset_password/send_email' do
 end
 
 post '/users/reset_password/send_email' do
-
   @email = params[:email]
   user = User.first(email: @email)
-  # avoid having to memorise ascii codes
-  token = SecureRandom.hex
-  user.password_token = token
-  user.password_token_timestamp = Time.now
-  user.save
-  flash[:notice] = 'Password recovery e-mail sent!'
-  redirect to '/email/' + token
+  if user.nil?
+    flash[:notice] = 'Unknown e-mail address, try again'
+    redirect to '/users/reset_password/send_email'
+  else
+    # avoid having to memorise ascii codes
+    token = SecureRandom.hex
+    user.password_token = token
+    user.password_token_timestamp = Time.now
+    user.save
+    flash[:notice] = 'Password recovery e-mail sent!'
+    redirect to '/email/' + token
+  end
 end
 
 get '/users/reset_password/:token' do
   @token = params[:token]
   user = User.first(password_token: @token)
-  erb :'users/reset_password/new'
+  if user.nil? || user.password_token_timestamp <= Time.now - (1 * 60 * 60)
+    flash[:notice] = 'Invalid token (already used or expired, please resend confirmation e-mail)'
+    redirect to '/'
+  else
+    erb :'users/reset_password/new'
+  end
 end
 
 post '/users/reset_password' do
   token = params[:token]
   user = User.first(password_token: token)
-  if user.password_token_timestamp >= DateTime.now - (1 * 60 * 60)
+  if user.password_token_timestamp >= Time.now - (1 * 60 * 60)
     user.password = params[:password]
     user.password_confirmation = params[:password_confirmation]
+    user.password_token = nil
+    user.password_token_timestamp = nil
     user.save
-    flash[:notice] = 'Password updated, please login with your new password'
+    flash[:notice] = 'New password saved, please login'
     redirect to '/sessions/new'
   else
     flash[:notice] = 'Your password did not get saved, try again'
