@@ -1,7 +1,7 @@
 require 'data_mapper'
 
 task :before do
-  fail "RAKE_ENV has not been specified" unless ENV.key?('RACK_ENV')
+  # fail "RAKE_ENV has not been specified" unless ENV.key?('RACK_ENV')
 end
 
 namespace :db do

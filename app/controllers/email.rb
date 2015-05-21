@@ -10,8 +10,9 @@ get '/email/:token' do
 
   RestClient.post API_URL + "/messages",
                   from: "rodcul@gmail.com",
-                  to: "rodcul@gmail.com",
+                  to: @email,
                   subject: "This is subject",
                   text: user.email,
                   html: "https://secret-retreat-5607.herokuapp.com/users/reset_password/" + token
+  redirect '/'
 end

@@ -30,8 +30,8 @@ end
 
 post '/users/reset_password/send_email' do
 
-  email = params[:email]
-  user = User.first(email: email)
+  @email = params[:email]
+  user = User.first(email: @email)
   # avoid having to memorise ascii codes
   token = SecureRandom.hex
   user.password_token = token

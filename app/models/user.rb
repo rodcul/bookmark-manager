@@ -8,7 +8,6 @@ class User
   property :email,                    String, unique: true
   property :password_token,           String
   property :password_token_timestamp, DateTime
-  property :password_token_timestamp2, DateTime
   # this will store both the password and the salt
   # It's Text and not String because String holds
   # 50 characters by default
