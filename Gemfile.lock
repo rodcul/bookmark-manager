@@ -80,6 +80,8 @@ GEM
       domain_name (~> 0.5)
     json (1.8.2)
     json_pure (1.8.2)
+    launchy (2.4.3)
+      addressable (~> 2.3)
     mime-types (2.5)
     mini_portile (0.6.2)
     multi_json (1.11.0)
@@ -137,6 +139,7 @@ DEPENDENCIES
   data_mapper
   database_cleaner
   dm-postgres-adapter
+  launchy
   rack-flash3
   rake
   rest-client
