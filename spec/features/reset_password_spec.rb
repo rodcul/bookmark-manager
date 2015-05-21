@@ -5,7 +5,7 @@ feature 'User forgotten password' do
                 password: 'test',
                 password_confirmation: 'test',
                 password_token: 'test-token',
-                password_token_timestamp: DateTime.now)
+                password_token_timestamp: Time.now)
 
   end
 
@@ -40,6 +40,14 @@ feature 'User forgotten password' do
     fill_in :password, with: 'newpassword'
     fill_in :password_confirmation, with: 'newpassword'
     click_button 'Reset password'
+    visit '/users/reset_password/test-token'
+    expect(page).to have_content('Invalid token')
+  end
+
+  scenario 'FAIL: expired token' do
+    user = User.first(password_token: 'test-token')
+    user.password_token_timestamp = (Time.now - (2 * 60 * 60))
+    user.save
     visit '/users/reset_password/test-token'
     expect(page).to have_content('Invalid token')
   end

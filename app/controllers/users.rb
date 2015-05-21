@@ -48,7 +48,7 @@ end
 get '/users/reset_password/:token' do
   @token = params[:token]
   user = User.first(password_token: @token)
-  if user.nil?
+  if user.nil? || user.password_token_timestamp <= Time.now - (1 * 60 * 60)
     flash[:notice] = 'Invalid token (already used or expired, please resend confirmation e-mail)'
     redirect to '/'
   else
@@ -59,7 +59,7 @@ end
 post '/users/reset_password' do
   token = params[:token]
   user = User.first(password_token: token)
-  if user.password_token_timestamp >= DateTime.now - (1 * 60 * 60)
+  if user.password_token_timestamp >= Time.now - (1 * 60 * 60)
     user.password = params[:password]
     user.password_confirmation = params[:password_confirmation]
     user.password_token = nil
