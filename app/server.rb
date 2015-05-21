@@ -3,8 +3,6 @@ require 'data_mapper'
 require 'rack-flash'
 require 'sinatra/partial'
 
-
-
 require_relative 'models/link' # this needs to be done after datamapper is initialised
 require_relative 'models/tag'
 require_relative 'models/user'

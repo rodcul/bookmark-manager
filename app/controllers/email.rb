@@ -27,4 +27,7 @@ get '/email/:token' do
     },
     verify_ssl: false
   )
+
+  flash[:notice] = "Password e-mail sent, check your inbox!"
+  redirect to '/'
 end
