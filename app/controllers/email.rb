@@ -15,7 +15,7 @@ get '/email/:token' do
       to: 'rodcul@gmail.com',
       subject: 'This is subject',
       text: 'This is text',
-      html: 'https://secret-retreat-5607.herokuapp.com/users/reset_password/' + token,
+      html: base_url + '/users/reset_password/' + token,
       multipart: true
     },
     headers: {
