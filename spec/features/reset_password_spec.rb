@@ -43,7 +43,7 @@ feature 'User forgotten password' do
     visit '/users/reset_password/test-token'
     expect(page).to have_content('Invalid token')
   end
-  
+
   scenario 'FAIL: Invalid token' do
     visit '/users/reset_password/invalid-token'
     expect(page).to have_content('Invalid token')

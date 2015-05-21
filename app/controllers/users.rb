@@ -62,6 +62,8 @@ post '/users/reset_password' do
   if user.password_token_timestamp >= DateTime.now - (1 * 60 * 60)
     user.password = params[:password]
     user.password_confirmation = params[:password_confirmation]
+    user.password_token = nil
+    user.password_token_timestamp = nil
     user.save
     flash[:notice] = 'New password saved, please login'
     redirect to '/sessions/new'
