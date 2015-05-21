@@ -57,5 +57,4 @@ feature 'User forgotten password' do
     expect(page).to have_content('Invalid token')
   end
 
-
 end
